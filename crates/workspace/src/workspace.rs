@@ -44,7 +44,7 @@ use gpui::{
     Focusable, Global, HitboxBehavior, Hsla, KeyContext, Keystroke, ManagedView, MouseButton,
     PathPromptOptions, Point, PromptLevel, Render, ResizeEdge, Size, Stateful, Subscription,
     SystemWindowTabController, Task, Tiling, WeakEntity, WindowBounds, WindowHandle, WindowId,
-    WindowOptions, actions, canvas, point, relative, size, transparent_black,
+    WindowOptions, actions, canvas, img, point, relative, size, transparent_black,
 };
 pub use history_manager::*;
 pub use item::{
@@ -6277,6 +6277,14 @@ impl Render for Workspace {
                                 .border_t_1()
                                 .border_b_1()
                                 .border_color(colors.border)
+                                .when_some(colors.background_image_file.as_ref(), |this, image_file| {
+                                    this.child(
+                                        img((**image_file).clone())
+                                            .absolute()
+                                            .object_fit(gpui::ObjectFit::Cover)
+                                            .size_full(),
+                                    )
+                                })
                                 .child({
                                     let this = cx.entity();
                                     canvas(
